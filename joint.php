@@ -10,6 +10,30 @@
 <?php 
 $charset = "utf8";
 
+$colors=[
+"Aqua",
+"Aquamarine",
+"BlueViolet",
+"Brown",
+"BurlyWood",
+"CadetBlue",
+"Chartreuse",
+"Coral",
+"CornflowerBlue",
+"Crimson",
+"Cyan",
+"DarkCyan",
+"DarkGoldenRod",
+"DarkGray",
+"DarkKhaki",
+"DarkOrange",
+"DeepPink",
+"GreenYellow",
+"LightGreen",
+"Sienna",
+"Red",
+"Tomato"
+];
 
 $teachers = [
 	"Блашків%О.%В",
@@ -23,14 +47,14 @@ $teachers = [
 	"Лукащук-Федик%С.%В",
 	"Саченко%А.%О.%",
 	"Римар%О.%Л.%",	
-	"Файфура",	
-	"Коваль",	
-	"Майків",
-	"Биковий",
+	"Файфура ",	
+	"Коваль%В.%С.",	
+	"Майків ",
+	"Биковий ",
 	"Турченко%І.",
-	"Гладій",
-	"Ляпандра",
-	"Пукас",
+	"Гладій ",
+	"Ляпандра ",
+	"Пукас ",
 	"Яцків%Н.",
 	"Пасічник%Р.%М.",
 	"Турченко%В.",
@@ -75,8 +99,19 @@ if (mysqli_connect_errno()) {
 mysqli_query ($con,"set character_set_client='$charset'"); 
 mysqli_query ($con,"set character_set_results='$charset'"); 
 mysqli_query ($con,"set collation_connection='".$charset."_general_ci'"); 
-//print_r (getLesson($con, 1, 2, "11:10:00", "Піговський"));
 
+$lessons=[];
+$color = 0;
+
+foreach ($teachers as $teacher) {
+	$colorString = $colors[$color];	
+	foreach (getTeacherLessons($con, $teacher) as $lesson) {
+		$t = $lesson->teacher;
+		$r = $lesson->room;
+		$lessons[$lesson->day][$lesson->lesson_time][$lesson->week][]="<p style='background-color:$colorString'>$t в а.$r</p>";
+	}	
+	$color++;
+}
 
 
 for($day=1; $day<=5; $day++) {	
@@ -88,18 +123,21 @@ for($day=1; $day<=5; $day++) {
 			$weekString = $oddEven[$week-1];
 			print "<td>$weekString </td> <td>";
 			
-			$lessons=[];
-			foreach ($teachers as $teacher) {
-			if ($lesson = getLesson($con, $week, $day, $time, $teacher)){ 	
-					$lessons[] = $lesson; 
-				}
+			if (! (array_key_exists($day, $lessons) &&
+					array_key_exists($time, $lessons[$day]) &&
+						array_key_exists($week, $lessons[$day][$time]) ) ) {
+							print "</td></tr>";
+							continue;							
 			}
-			//$lessons = array_unique($lessons);
-			if ($lessons) {
-				foreach($lessons as $lesson) {
-					$t = $lesson["teacher"];
-					$r = $lesson["room"];
-					print "<p>$t в а.$r</p>";
+			
+			$ll = $lessons[$day][$time][$week];			
+			if ($ll) {
+				if (is_array($ll)) {
+					foreach(array_unique($ll, SORT_REGULAR) as $lesson) {					
+						print $lesson;
+					}
+				} else {
+					print $ll;
 				}
 			}
 			print "</td></tr>";
@@ -107,13 +145,17 @@ for($day=1; $day<=5; $day++) {
 	}	
 }
 
-function getLesson($con, $week, $day, $time, $teacher) {
-	$sth = mysqli_query($con,"SELECT teacher,room from timetable where week=$week and day=$day and lesson_time='$time' and teacher like '%$teacher%'");	//
-	
-	if($sth && $r = mysqli_fetch_assoc($sth)) {
-		
-		return $r;
+mysqli_close($con);
+
+function getTeacherLessons($con, $teacher){
+	$sth = mysqli_query($con,"SELECT * from timetable where teacher like '%$teacher%'");	
+	if (!$sth)
+		return;
+	$lessons = [];
+	while($r = mysqli_fetch_object($sth)) {		
+		$lessons[] = $r;
 	}
+	return $lessons;
 }
 
 ?>
