@@ -1,0 +1,29 @@
+body {
+    background-color: #d0e4fe;
+}
+
+h1 {
+    color: orange;
+    text-align: center;
+	font-size: 40px;
+}
+
+p{
+	font-size: 20px;
+}
+
+li {
+    font-family: "Times New Roman";
+    font-size: 40px;
+}
+
+table,th,td {	
+	background-color: white;	
+	border: 1px solid black;
+	border-collapse: collapse;
+	padding: 15px;	
+}
+
+td {
+	font-size: 20px;
+}
