@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>Розклад</title>
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="styles.css">
   <script src="js/jquery-latest.js"></script>
   <script src="js/jquery-ui-latest.js"></script>
   <script src="js/knockout-3.1.0.js"></script>  
@@ -16,32 +17,15 @@
 	<input id="autocomplete1" />
 	</p>
 </div>
-<button data-bind="click: addTeacher">Добавити</button>
-<h1><button data-bind="click: readLessons">Пошук</button></h1>
+<button data-bind="click: addTeacher">Добавити викладача</button>
+<p><button data-bind="click: readLessons">Пошук</button></p>
  
  
 <h2>Timetable </h2>
 
-<table border="1">
-    <thead><tr>
-        <th>Тиждень</th><th>День</th><th>Час</th>
-		<th>Група</th><th>Факультет</th><th>Викладач</th><th>Предмет</th><th>Аудиторія</th>
-    </tr></thead>
-    <!-- Todo: Generate table body -->
-    <tbody data-bind="foreach: lessons">
-        <tr>
-            <td data-bind="text: doc.week"/>
-			<td data-bind="text: doc.day"/>			
-            <td data-bind="text: doc.time"/>
-			<td data-bind="text: doc.group"/>
-			<td data-bind="text: doc.faculty"/>
-            <td data-bind="text: doc.teacher"/>
-			<td data-bind="text: doc.subject"/>
-			<td data-bind="text: doc.room"/>
-         </tr>
-    </tbody>
+<table id="timetable" border="1">        
+
 </table>
- 
  
 <script src="js/teacherAutocomplete.js"></script>
 </body>
