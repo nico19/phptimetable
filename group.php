@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Cайт Піговського Ю.Р.</title>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="styles.css" />
-</head>
-<body> 
+<?php 
+include "static/head.html";
+?>
 <table>
 <?php 
-$charset = "utf8";
-
 $colors=[
 "Aqua",
 "Aquamarine",
@@ -35,8 +28,8 @@ $colors=[
 "Tomato"
 ];
 
-$teachers = [
-	$_REQUEST["teacher"]
+$groups = [
+	$_REQUEST["group"]
 	/*"Блашків%О.%В",
 	"Гурик%М.%І",
 	"Юрчишин%Т.%В.%",
@@ -86,30 +79,18 @@ $oddEven=[
 "знаменник"
 ];
 
-$dbname = "timetable";
-$user = "root";
-$pwd="";
-$host ="localhost";
-$con=mysqli_connect($host,$user,$pwd,$dbname);
-
-// Check connection
-if (mysqli_connect_errno()) {
-  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-  return;
-}
-mysqli_query ($con,"set character_set_client='$charset'"); 
-mysqli_query ($con,"set character_set_results='$charset'"); 
-mysqli_query ($con,"set collation_connection='".$charset."_general_ci'"); 
+include "connect.php";
 
 $lessons=[];
 $color = 0;
 
-foreach ($teachers as $teacher) {
+foreach ($groups as $group) {
 	$colorString = $colors[$color];	
-	foreach (getTeacherLessons($con, $teacher) as $lesson) {
+	foreach (getGroupLessons($con, $group) as $lesson) {
+		$g = $lesson->st_group;
 		$t = $lesson->teacher;
 		$r = $lesson->room;
-		$lessons[$lesson->day][$lesson->lesson_time][$lesson->week][]="<p style='background-color:$colorString'>$t в а.$r</p>";
+		$lessons[$lesson->day][$lesson->lesson_time][$lesson->week][]="<p style='background-color:$colorString'>$g, $t в а.$r</p>";
 	}	
 	$color++;
 }
@@ -148,8 +129,8 @@ for($day=1; $day<=5; $day++) {
 
 mysqli_close($con);
 
-function getTeacherLessons($con, $teacher){
-	$sth = mysqli_query($con,"SELECT * from timetable where teacher like '%$teacher%'");	
+function getGroupLessons($con, $group){
+	$sth = mysqli_query($con,"SELECT * from timetable where st_group like '%$group%'");	
 	if (!$sth)
 		return;
 	$lessons = [];
