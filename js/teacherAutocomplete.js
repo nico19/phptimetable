@@ -1,15 +1,41 @@
+var COLORS=[
+"Aqua",
+"Aquamarine",
+"BlueViolet",
+"Brown",
+"BurlyWood",
+"CadetBlue",
+"Chartreuse",
+"Coral",
+"CornflowerBlue",
+"Crimson",
+"Cyan",
+"DarkCyan",
+"DarkGoldenRod",
+"DarkGray",
+"DarkKhaki",
+"DarkOrange",
+"DeepPink",
+"GreenYellow",
+"LightGreen",
+"Sienna",
+"Red",
+"Tomato"
+];
+
+
 var AUTOCOMPLETE_ID = "autocomplete";
 
 var $times = [
-		"08:00:00",
-		"09:35:00",
-		"11:10:00",
-		"12:50:00",
-		"14:25:00",
-		"16:00:00",
-		"17:35:00",
-		"19:00:00",
-		"20:15:00"
+		"08:00",
+		"09:35",
+		"11:10",
+		"12:50",
+		"14:25",
+		"16:00",
+		"17:35",
+		"19:00",
+		"20:15"
 	];
 
 var $days=[
@@ -25,7 +51,27 @@ var $oddEven=[
 		"знаменник"
 	];
 
-function print($lessons){
+function TeacherTimetable(){
+	var me = this;
+	
+	$.ajax({
+	  type: "GET",
+	  url: 'allTeachers.php' 
+	  })
+	  .done(function( msg ) {		
+			me.teachers = JSON.parse(msg);
+			me.teachers.forEach(function(e){
+				console.log(e);
+	     });
+	   })
+	   .fail(function(msg){ 
+			me.error("cannot load teacher list");
+	   });
+}
+
+var _p = TeacherTimetable.prototype;
+
+_p.print = function ($lessons){
 	var html = "";
 	for($day=1; $day<=5; $day++) {	
 		$dayString = $days[$day-1];
@@ -38,7 +84,7 @@ function print($lessons){
 				
 				if (! (($day in $lessons) &&
 						($time in $lessons[$day]) &&
-							($week in $lessons[$day][$time]) ) ) {
+							($week in $lessons[$day][$time+":00"]) ) ) {
 								html+= "</td></tr>";
 								continue;							
 				}
@@ -56,92 +102,23 @@ function print($lessons){
 	document.getElementById("timetable").innerHTML = html;
 }
 
+_p.error = function(msg){
+	alert(msg);
+};
 
-function addAutocomplete(id){
+_p.addAutocomplete = function (id){
+	var me = this;
 	$( "#autocomplete" +id ).autocomplete({
 	  source: function(request, response)
 	  {
-		$.ajax({
-	  type: "GET",
-	  //processData: false,
-	  url: 'autocomplete.php',
-	  //dataType: 'jsonp',
-	  data: {
-			teacher: request.term		
-	  } 
-	  })
-	  .done(function( msg ) {
-		//console.log(msg);
-		msg = JSON.parse(msg);	
-		/*msg.forEach(
-			function(e)
-			{
-				console.log(e);
+		  var matches = [];
+		  me.teachers.forEach(function(t){
+			if(t.value.indexOf(request.term)>=0){
+				matches.push(t.value);
 			}
-		);*/
-		response(msg);
-	  })
-	  .fail(function(msg)
-	  { 
-		response([msg])
-	  } );
-		
-		
-		
+		  });
+		  response(matches);
 	  }
 	});
 }
 
-function TeacherLessonsViewModel() 
-{
-	addAutocomplete(1);
-	var self = this;
-	self.teachersDIV = document.getElementById("teachers");
-	self.teacherCount = 1;
-	
-	self.getTeachers = function(){
-		teachers=[];
-		for(var i=1; i<=self.teacherCount; i++) {
-			teachers.push($('#'+AUTOCOMPLETE_ID+i).val());
-		}
-		return teachers;
-	};
-	
-	self.setTeachers = function(teachers){
-		for(var i=1; i<=self.teacherCount; i++) {
-			$('#'+AUTOCOMPLETE_ID+i).val(teachers[i-1]);
-		}
-	};		
-		
-	
-    self.readLessons = 
-		function(){ 
-			$.ajax({
-				type: "GET",
-				url: 'joint.php',
-				data: {teacher: JSON.stringify(self.getTeachers()) } 
-			})
-		.done(function( msg ) {
-			console.log(msg);
-			msg = JSON.parse(msg);				
-			//msg.forEach(function(e){console.log(e);});
-			//self.lessons(msg);
-			print(msg)
-		  })
-		.fail(function(msg){ 
-			print([msg]);
-		} );
-	};
-	
-	self.addTeacher = function(){
-		self.teacherCount++;
-		var id = '"autocomplete'+self.teacherCount+'"';
-		var teachers = self.getTeachers();
-		self.teachersDIV.innerHTML+='<p><label for='+id+'>Викладач: </label>' +
-			"<input id="+id+"/></p>";
-		addAutocomplete(self.teacherCount);
-		self.setTeachers(teachers);
-	};
-}
-
-ko.applyBindings(new TeacherLessonsViewModel());
