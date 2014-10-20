@@ -19,11 +19,12 @@ _p.getTeachers = function(){
 _p.getTeacherIds = function(){
 	var ids=[];
 	var teachers = this.getTeachers();
-	this.teacherTimetable.teachers.forEach(function(t){
-		if(teachers.indexOf(t.value)>=0){
-			ids.push(t.id);
+	for(var id in this.teacherTimetable.teachers){
+		var value = this.teacherTimetable.teachers[id];
+		if(teachers.indexOf(value)>=0){
+			ids.push(id);
 		}
-	});
+	}
 	return ids;
 };
 	
@@ -41,10 +42,9 @@ _p.readLessons = function(){
 		url: 'joint.php',
 		data: {teacher: JSON.stringify(me.getTeacherIds()) } 
 	})
-	.done(function( msg ) {
-		console.log(msg);
-		msg = JSON.parse(msg);						
-		me.teacherTimetable.print(msg)
+	.done(function( dataString ) {		
+		data = JSON.parse(dataString);						
+		me.teacherTimetable.print(data)
 	  })
 	.fail(function(msg){ 
 		me.teacherTimetable.error("cannot read lessons");

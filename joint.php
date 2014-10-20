@@ -28,7 +28,7 @@ mysqli_close($con);
 print json_encode($lessons);
 
 function getTeacherLessons($con, $teacher){
-	$sth = mysqli_query($con,"SELECT * from timetable where teacher=$teacher");	
+	$sth = mysqli_query($con,"SELECT * from timetable where teacher=$teacher order by day, lesson_time");	
 	if (!$sth)
 		return;
 	$lessons = [];

@@ -1,0 +1,35 @@
+commit 16b70c31a847acf755fa038eec61394d29826e64
+Author: Yuriy Pigovsky <pigovsky@gmail.com>
+Date:   Thu Oct 16 09:36:32 2014 +0300
+
+    added logic to process new db structure with separate entities for faculty, group, subjects and teachers
+
+commit 961581d291496ebbf07607a04ec506b65c4c8c5d
+Author: Yuriy Pigovsky <pigovsky@gmail.com>
+Date:   Mon Sep 15 16:06:54 2014 +0300
+
+    now lessons are formatted in js, but without knockout
+
+commit 13e42baaa8533e0b8f79bdeda6865096c56530ad
+Author: Yuriy Pigovsky <pigovsky@gmail.com>
+Date:   Mon Sep 15 13:20:26 2014 +0300
+
+    Started dynamic timetable output using Knockout.js
+
+commit e31b02393f0cc436a0c7d805880c54de57274d2a
+Author: Yuriy Pigovsky <pigovsky@gmail.com>
+Date:   Sun Sep 14 21:31:52 2014 +0300
+
+    improved performance reducing number of sql requests, added colors
+
+commit 878c4a4489668066abfa8681f371e883f1fa725e
+Author: Yuriy Pigovsky <pigovsky@gmail.com>
+Date:   Sun Sep 14 18:37:23 2014 +0300
+
+    Added php file to receive lessons of all the teachers in array
+
+commit 60485baeae0595aefe71210b228d5e10f902643b
+Author: Yuriy Pigovsky <pigovsky@gmail.com>
+Date:   Sun Sep 14 18:35:57 2014 +0300
+
+    first commit
