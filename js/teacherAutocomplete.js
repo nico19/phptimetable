@@ -56,6 +56,7 @@ function TeacherTimetable(){
 	this.readTable("teacher", function(d){me.teachers=d;});
 	this.readTable("st_group", function(d){me.groups=d;});
 	this.readTable("subject", function(d){me.subjects=d;});
+	this.readTable("faculty", function(d){me.faculties=d;});
 }
 
 var _p = TeacherTimetable.prototype;
@@ -122,7 +123,8 @@ _p.print = function ($lessons){
 _p.formatLesson = function (e){
 	return this.teachers[e.teacher]+
 			this.subjects[e.subject] + ", "+
-			this.groups[e.st_group] + " в а."+
+			this.groups[e.st_group] + "("+ 
+			this.faculties[e.faculty]+") в а."+
 			e.room + "<br>";
 }
 
