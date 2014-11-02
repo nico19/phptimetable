@@ -61,4 +61,9 @@ _p.addTeacher = function(){
 	this.setTeachers(teachers);
 };
 
-ko.applyBindings(new TeacherLessonsViewModel());
+$(function() {
+	$( "#tabs" ).tabs();
+	ko.applyBindings(new TeacherLessonsViewModel());
+});
+
+
