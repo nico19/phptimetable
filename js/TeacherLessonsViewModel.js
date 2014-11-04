@@ -11,7 +11,7 @@ var _p = TeacherLessonsViewModel.prototype;
 _p.getTeachers = function(){
 	var teachers=[];
 	for(var i=1; i<=this.teacherCount; i++) {
-		teachers.push($('#'+AUTOCOMPLETE_ID+i).val());
+		teachers.push($('#'+Config.AUTOCOMPLETE_ID+i).val());
 	}
 	return teachers;
 };
@@ -30,7 +30,7 @@ _p.getTeacherIds = function(){
 	
 _p.setTeachers = function(teachers){
 	for(var i=1; i<=this.teacherCount; i++) {
-		$('#'+AUTOCOMPLETE_ID+i).val(teachers[i-1]);
+		$('#'+Config.AUTOCOMPLETE_ID+i).val(teachers[i-1]);
 		this.teacherTimetable.addAutocomplete(i);
 	}
 };		
@@ -39,7 +39,7 @@ _p.readLessons = function(){
 	var me = this;
 	$.ajax({
 		type: "GET",
-		url: 'joint.php',
+		url: Config.READ_LESSONS_SCRIPT,
 		data: {teacher: JSON.stringify(me.getTeacherIds()) } 
 	})
 	.done(function( dataString ) {		
@@ -53,7 +53,7 @@ _p.readLessons = function(){
 	
 _p.addTeacher = function(){
 	this.teacherCount++;
-	var id = '"autocomplete'+this.teacherCount+'"';
+	var id = '"'+Config.AUTOCOMPLETE_ID+this.teacherCount+'"';
 	var teachers = this.getTeachers();
 	this.teachersDIV.innerHTML+='<p><label for='+id+'>Викладач: </label>' +
 		"<input id="+id+"/></p>";	
@@ -63,6 +63,7 @@ _p.addTeacher = function(){
 
 $(function() {
 	$( "#tabs" ).tabs();
+	$('#lessonInfo').hide();
 	ko.applyBindings(new TeacherLessonsViewModel());
 });
 

@@ -3,14 +3,16 @@
 <head>
   <meta charset="utf-8">
   <title>Розклад</title>
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">  
   <link rel="stylesheet" href="styles.css">
+  <script src="js/Config.js"></script>
   <script src="js/jquery-latest.js"></script>
   <script src="js/jquery-ui-latest.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular.min.js"></script>
+  <script src="js/angular.min.js"></script>
   <script src="js/knockout-3.1.0.js"></script> 
   <script src="js/RoomBusiness.js"></script>
   <script src="js/teacherAutocomplete.js"></script>
+  <script src="js/TeacherLessonsViewModel.js"></script>
 </head>
 <body>
 <div id="tabs">
@@ -32,24 +34,27 @@
 	</table>
   </div>
   <div id="tabs-rooms">
-	<div ng-controller="RoomBusiness">		
-		  <table>
-			<tr ng-repeat="(room, lessons) in data">				
-				<td>{{room}}</td>			  
-				<td ng-repeat="lesson in lessons">								
-					{{$days[lesson.day-1]}} о 
-					{{lesson.lesson_time}}
-					<a href="showLesson.php?id={{lesson.id}}"> {{$oddEven[lesson.week-1]}}</a>
-				</td>
-			</tr>
-		  </table>
+	<div ng-controller="RoomBusiness">	
+			
+			<div class="room-style" ng-repeat="(room, dayTimeWeeks) in data">	
+				{{room}}<br/>
+				<div class="day-style" ng-repeat="(day, timeWeeks) in dayTimeWeeks">
+					<p class="p-day">{{Config.DAYS[day]}}</p>				
+					<div class="time-style" ng-repeat="(time, weeks) in timeWeeks">
+						{{time}}
+						<div class="week-style" ng-repeat="(week, v) in weeks">
+							<a ng-click="showLesson(room,day,time,week)">{{Config.ODD_EVEN[week-1]}}</a>
+						</div>						
+					</div>
+					<br/>
+				</div>
+			</div>	
+			<div id="lessonInfo"></div>
 		  <form ng-submit="loadRoomBusiness()">        
-			<input class="btn-primary" type="submit" value="add">
+			<input class="btn-primary" type="submit" value="Показати">
 		  </form>
 	</div>
   </div>  
 </div>
-
-<script src="js/TeacherLessonsViewModel.js"></script>
 </body>
 </html>

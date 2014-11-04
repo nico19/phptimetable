@@ -8,7 +8,7 @@ button {
 }
 
 p {
-	font-size: 20px;
+	font-size: 20px;	
 }
 
 input {
@@ -28,6 +28,42 @@ li {
 .item {
 	font-size: 40px;
 	font-family: "Times New Roman";
+}
+
+.room-style{	
+	font-size: 24px;
+	padding: 30px;
+	margin: 30px;
+	border:1px solid #000;
+	background-color: #FF99FF;		
+}
+
+.day-style{	
+	font-size: 18px;
+	padding: 5px;
+	border:1px solid #000;
+	background-color: #66FFFF;	
+	clear: both;
+}
+
+.p-day{	
+	padding-top: 0px;
+	padding-bottom: 10px;
+}
+
+.time-style{	
+	font-size: 16px;
+	padding: 5px;	
+	margin-bottom: 30px;
+	border:1px solid #000;
+	background-color: #FFFFCC;	
+	display: inline;
+}
+
+.week-style{	
+	font-size: 14px;
+	background-color: lightgray;	
+	display: inline;
 }
 
 table,th,td {	

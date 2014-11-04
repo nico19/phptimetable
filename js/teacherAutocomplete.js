@@ -1,56 +1,3 @@
-var COLORS=[
-"Aqua",
-"Aquamarine",
-"BlueViolet",
-"Brown",
-"BurlyWood",
-"CadetBlue",
-"Chartreuse",
-"Coral",
-"CornflowerBlue",
-"Crimson",
-"Cyan",
-"DarkCyan",
-"DarkGoldenRod",
-"DarkGray",
-"DarkKhaki",
-"DarkOrange",
-"DeepPink",
-"GreenYellow",
-"LightGreen",
-"Sienna",
-"Red",
-"Tomato"
-];
-
-
-var AUTOCOMPLETE_ID = "autocomplete";
-
-var $times = [
-		"08:00",
-		"09:35",
-		"11:10",
-		"12:50",
-		"14:25",
-		"16:00",
-		"17:35",
-		"19:00",
-		"20:15"
-	];
-
-var $days=[
-		"Понеділок",
-		"Вівторок",
-		"Середа",
-		"Четвер",
-		"П'ятниця"
-	];	
-
-var $oddEven=[
-		"чисельник",
-		"знаменник"
-	];
-
 function TeacherTimetable(){
 	var me = this;
 	this.readTable("teacher", function(d){me.teachers=d;});
@@ -65,7 +12,7 @@ _p.readTable = function (table, assignFunc){
 	var me = this;	
 	$.ajax({
 		type: "GET",
-		url: 'all.php',
+		url: Config.ALL_TABLE_SCRIPT,
 		data: {table: table}
 	  })
 	  .done(function( dataString ) {		
@@ -86,7 +33,7 @@ _p.print = function ($lessons){
 	var me = this;
 	var html = "";
 	for($day=1; $day<=5; $day++) {					
-		$dayString = $days[$day-1];
+		var $dayString = Config.DAYS[$day-1];
 		if ($day in $lessons){
 			var records = Object.keys($lessons[$day]).length*2;
 			console.log('lessons[day].length='+records);
@@ -98,7 +45,7 @@ _p.print = function ($lessons){
 		for(var $time in $lessons[$day]) {
 			html+= "<td rowspan=2>" + $time + "</td>";
 			for($week=1; $week<=2; $week++){
-				$weekString = $oddEven[$week-1];
+				$weekString = Config.ODD_EVEN[$week-1];
 				html+= "<td>" + $weekString + "</td> <td>";
 											
 				if (! (	($week in $lessons[$day][$time]) ) ) {
@@ -134,7 +81,7 @@ _p.error = function(msg){
 
 _p.addAutocomplete = function (id){
 	var me = this;
-	$( "#autocomplete" +id ).autocomplete({
+	$( "#"+Config.AUTOCOMPLETE_ID +id ).autocomplete({
 	  source: function(request, response)
 	  {
 		  var matches = [];
